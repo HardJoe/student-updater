@@ -15,10 +15,13 @@ mongoose
 
 app.use(express.json());
 
-app.post('/', async (req, res) => {
+app.post('/update', async (req, res) => {
   const { nama, npm } = req.body;
-  const person = new Student({ name: nama, npm });
-  await person.save();
+  const student = await Student.findOneAndUpdate({ npm }, { name: nama });
+  if (!student) {
+    const person = new Student({ name: nama, npm });
+    await person.save();
+  }
   res.json({ status: 'OK' });
 });
 
